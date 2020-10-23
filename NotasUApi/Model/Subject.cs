@@ -9,17 +9,11 @@ namespace NotasUApi.Model
 {
     public class Subject
     {
-        public Subject()
-        {
-            for (int i = 0; i < 3; ++i)
-            {
-                AddQualification(new Qualification { Cort = i + 1 });
-            }
-        }
+      
 
         [Key, MaxLength(10)]
         public string Code { get; set; }
-        public List<Qualification> Qualifications { get; set; }
+        public List<Qualification> Qualifications { get; set; } = new List<Qualification>(3);
         public decimal Definitiva { get; set; }
 
         public string Name { get; set; }

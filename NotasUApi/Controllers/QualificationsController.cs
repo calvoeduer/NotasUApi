@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NotasUApi.Data;
 using NotasUApi.Model;
 using NotasUApi.Model.ViewModel;
@@ -31,6 +32,11 @@ namespace NotasUApi.Controllers
         {
             Subject subject = _mapper.Map<Subject>(subjectInput);
 
+            for (int i = 0; i < 3; ++i)
+            {
+                subject.Qualifications.Add(new Qualification { Cort = i + 1 });
+            }
+
             dbContext.Subjects.Add(subject);
             await dbContext.SaveChangesAsync();
 
@@ -40,7 +46,8 @@ namespace NotasUApi.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult<ActivityViewModel>> SaveActivity([FromBody] ActivityInputModel activityInput)
         {
-            Qualification qualification = await dbContext.Qualifications.FindAsync(activityInput.QualificationId);
+            Qualification qualification = await dbContext.Qualifications.Include(a => a.Activities)
+                 .Where(q => q.Id == activityInput.QualificationId).FirstOrDefaultAsync();
             if (qualification is null)
                 return BadRequest($"There is no Qualification with the id = {activityInput.QualificationId}");
 
@@ -48,7 +55,7 @@ namespace NotasUApi.Controllers
 
             if (!qualification.AddActivity(activity))
                 return BadRequest($"The activity cannot be added, the percentage of the activity exceeds the allowed");
-
+            qualification.Calculate();
             dbContext.Qualifications.Update(qualification);
             await dbContext.SaveChangesAsync();
 
@@ -58,7 +65,7 @@ namespace NotasUApi.Controllers
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<SubjectViewModel>>> GetSubjects()
         {
-            List<Subject> subjects = await dbContext.Subjects.ToListAsync();
+            List<Subject> subjects = await dbContext.Subjects.Include(s => s.Qualifications).ThenInclude(s => s.Activities).ToListAsync();
             return Ok(_mapper.Map<IEnumerable<SubjectViewModel>>(subjects));
         }
 
@@ -80,6 +87,19 @@ namespace NotasUApi.Controllers
         {
             Activity activity = await dbContext.Activities.FindAsync(id);
             if (activity is null) return NotFound($"Actividad no encontrada: {id}");
+
+            Qualification qualification = await dbContext.Qualifications.Include(a => a.Activities)
+                .Where(q => q.Id == activity.QualificationId).FirstOrDefaultAsync();
+            if (qualification is null) return BadRequest($"La actividad con id {activity.QualificationId} no existe");
+
+
+
+            var diff = activityEdit.Percent - activity.Percent;
+
+            if (qualification.TotalActivityPercent + diff > 1) return BadRequest($"Superó el porcentaje permitido");
+            
+
+
             _mapper.Map(activityEdit, activity);
             dbContext.Activities.Update(activity);
             await dbContext.SaveChangesAsync();

@@ -41,7 +41,7 @@ namespace NotasUApi.Migrations
                         column: x => x.SubjectCode,
                         principalTable: "Subjects",
                         principalColumn: "Code",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -64,7 +64,7 @@ namespace NotasUApi.Migrations
                         column: x => x.QualificationId,
                         principalTable: "Qualifications",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

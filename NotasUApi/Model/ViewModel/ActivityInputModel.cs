@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NotasUApi.Model.ViewModel
 {
-    public class ActivityInputModel : SubjectEditModel
+    public class ActivityInputModel : ActivityEditModel
     {
         [Required]
         public int QualificationId { get; set; }

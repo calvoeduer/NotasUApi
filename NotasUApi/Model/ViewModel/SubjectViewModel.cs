@@ -8,7 +8,7 @@ namespace NotasUApi.Model.ViewModel
 {
     public class SubjectViewModel : SubjectInputModel
     {
-        public List<QualificationViewModel> Qualificatios { get; set; }
+        public List<QualificationViewModel> Qualifications { get; set; }
 
     }
 }

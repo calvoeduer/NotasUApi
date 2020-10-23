@@ -8,7 +8,10 @@ namespace NotasUApi.Model
 {
     public class Activity
     {
+        
         public int Id { get; set; }
+
+        public int QualificationId { get; set; }
         public string Name { get; set; }
         [Range(0,5)]
         public decimal Note { get; set; }

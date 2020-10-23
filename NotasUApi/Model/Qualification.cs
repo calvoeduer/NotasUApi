@@ -13,7 +13,7 @@ namespace NotasUApi.Model
         [Range (1,3), Required]
         public int Cort { get; set; }
 
-        public List<Activity> Activities  { get; set; }
+        public List<Activity> Activities { get; set; } = new List<Activity>();
 
         public decimal TotalPartial { get; set; }
 
@@ -42,6 +42,7 @@ namespace NotasUApi.Model
 
         public bool AddActivity(Activity activity)
         {
+            Calculate();
             if ((TotalActivityPercent + activity.Percent) > 1) return false;
 
             Activities.Add(activity);

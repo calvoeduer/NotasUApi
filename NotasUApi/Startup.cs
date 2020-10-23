@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MySql.Data.EntityFrameworkCore.Extensions;
 using NotasUApi.Data;
+using NotasUApi.Extensions;
 
 namespace NotasUApi
 {
@@ -39,6 +40,9 @@ namespace NotasUApi
             services.AddEntityFrameworkMySQL();
 
             services.AddAutoMapper(typeof(Startup));
+
+            services.AddSwagger();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +63,13 @@ namespace NotasUApi
             {
                 endpoints.MapControllers();
             });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(s =>
+            {
+                s.SwaggerEndpoint("/swagger/v1/swagger.json", "My API version-1");
+            });
+
         }
     }
 }
