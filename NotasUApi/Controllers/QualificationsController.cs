@@ -99,9 +99,16 @@ namespace NotasUApi.Controllers
             if (qualification.TotalActivityPercent + diff > 1) return BadRequest($"Superó el porcentaje permitido");
             
 
-
             _mapper.Map(activityEdit, activity);
             dbContext.Activities.Update(activity);
+
+            qualification.Activities.RemoveAll(a => a.Id == activity.Id);
+            if (!qualification.AddActivity(activity))
+                return BadRequest($"The activity cannot be added, the percentage of the activity exceeds the allowed");
+
+            qualification.Calculate(); 
+            dbContext.Update(qualification);
+
             await dbContext.SaveChangesAsync();
 
             return _mapper.Map<ActivityViewModel>(activity);
