@@ -8,7 +8,7 @@ using NotasUApi.Data;
 
 namespace NotasUApi.Migrations
 {
-    [DbContext(typeof(AplicationDbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20201023143755_Inicial")]
     partial class Inicial
     {

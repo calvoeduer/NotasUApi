@@ -32,7 +32,7 @@ namespace NotasUApi
         {
             services.AddControllers();
 
-            services.AddDbContext<AplicationDbContext>(options =>
+            services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseMySQL(Configuration.GetConnectionString("DefaultConnection"));
             });
