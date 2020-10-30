@@ -7,7 +7,8 @@ namespace NotasUApi.Model.ViewModel
 {
     public class SubjectInputModel : SubjectEditModel
     {
-        public string Code { get; set; } 
-       
+        public string Code { get; set; }
+
+        public string UserId { get; set; }
     }
 }
