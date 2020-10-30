@@ -21,6 +21,9 @@ namespace NotasUApi.Mappers
             CreateMap<ActivityInputModel, Activity>();
             CreateMap<ActivityEditModel, Activity>();
             CreateMap<Activity, ActivityViewModel>();
+
+            CreateMap<ApplicationUserInputModel, ApplicationUser>();
+            CreateMap<ApplicationUser, ApplicationUserViewModel>();
         }
     }
 }

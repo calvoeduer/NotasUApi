@@ -38,11 +38,13 @@ namespace NotasUApi
                 options.UseMySQL(Configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddEntityFrameworkMySQL();
-
             services.AddAutoMapper(typeof(Startup));
-
             services.AddSwagger();
-
+            services.ConfigureDbContext(Configuration);
+            services.AddIdentityConfig();
+            services.AddJwtAuthentication(Configuration);
+            services.ConfigureTokenGenerator();
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +59,8 @@ namespace NotasUApi
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -69,6 +73,9 @@ namespace NotasUApi
             {
                 s.SwaggerEndpoint("/swagger/v1/swagger.json", "My API version-1");
             });
+
+           
+
 
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Security.Permissions;
 using System.Threading.Tasks;
@@ -18,14 +19,10 @@ namespace NotasUApi.Model
 
         public string Name { get; set; }
 
-        public bool AddQualification(Qualification qualification)
-        {
-            if (qualification is null) return false;
-            if (qualification.Cort > 3 || qualification.Cort <= 0) return false;
+        public string UserId { get; set; }
 
-            Qualifications[qualification.Cort - 1] = qualification;
-            return true;
+        [ForeignKey("UserId")]
+        public ApplicationUser User { get; set; }
 
-        }
     }
 }

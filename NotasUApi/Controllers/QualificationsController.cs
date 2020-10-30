@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NotasUApi.Data;
@@ -24,6 +25,7 @@ namespace NotasUApi.Controllers
             _mapper = mapper;
         }
 
+        [Authorize]
         [HttpPost("[action]")]
         public async Task<ActionResult<SubjectViewModel>> SaveSubject([FromBody] SubjectInputModel subjectInput)
         {
@@ -40,6 +42,7 @@ namespace NotasUApi.Controllers
             return _mapper.Map<SubjectViewModel>(subject);
         }
 
+        [Authorize]
         [HttpPost("[action]")]
         public async Task<ActionResult<ActivityViewModel>> SaveActivity([FromBody] ActivityInputModel activityInput)
         {
@@ -64,6 +67,7 @@ namespace NotasUApi.Controllers
             return _mapper.Map<ActivityViewModel>(activity);
         }
 
+        [Authorize]
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<SubjectViewModel>>> GetSubjects()
         {
@@ -71,8 +75,8 @@ namespace NotasUApi.Controllers
             return Ok(_mapper.Map<IEnumerable<SubjectViewModel>>(subjects));
         }
 
+        [Authorize]
         [HttpPut("[action]/{code}")]
-
         public async Task<ActionResult<SubjectViewModel>> UpdateSubject(string code, [FromBody] SubjectEditModel editModel)
         {
             Subject subject = await dbContext.Subjects.FindAsync(code);
@@ -88,8 +92,9 @@ namespace NotasUApi.Controllers
             return _mapper.Map<SubjectViewModel>(subject);
         }
 
+        [Authorize]
         [HttpPut("[action]/{id}")]
-        public async Task<ActionResult<ActivityViewModel>> UpdateActivy(int id, [FromBody] ActivityEditModel activityEdit)
+       public async Task<ActionResult<ActivityViewModel>> UpdateActivy(int id, [FromBody] ActivityEditModel activityEdit)
         {
             Activity activity = await dbContext.Activities.FindAsync(id);
             if (activity is null)
@@ -129,6 +134,7 @@ namespace NotasUApi.Controllers
 
         }
 
+        [Authorize]
         [HttpDelete("[action]/{code}")]
         public async Task<ActionResult<SubjectViewModel>> DeleteSubject(string code)
         {
@@ -144,6 +150,7 @@ namespace NotasUApi.Controllers
             return _mapper.Map<SubjectViewModel>(subject);
         }
 
+        [Authorize]
         [HttpDelete("[action]/{id}")]
         public async Task<ActionResult<ActivityViewModel>> DeleteActivity(int id)
         {
